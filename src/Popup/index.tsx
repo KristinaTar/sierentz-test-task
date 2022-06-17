@@ -51,6 +51,9 @@ const Popup: React.FC<Props> = ({ closeWindow }) => {
     }
 
     setTableData([...tableData, newObject]);
+
+    setValue('');
+    setComment('');
   }
 
   return (
