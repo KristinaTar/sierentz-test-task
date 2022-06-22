@@ -1,7 +1,7 @@
 {
   "name": "sierentz",
   "version": "0.1.0",
-  "homepage": ".",
+  "homepage": "https://KristinaTar.github.io/sierentz-test-task",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.9.3",

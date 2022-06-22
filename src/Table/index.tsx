@@ -1,5 +1,4 @@
 import * as React from 'react';
-import ReactDOM, { createPortal } from "react-dom";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -7,10 +6,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import untypedData from '../data/dataMainTable';
-import Popup from '../Popup';
 import parseObject from '../data/parseObject';
 import { Container } from '@mui/system';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 declare global {
   interface Window {
@@ -47,7 +45,6 @@ const brStyle = { borderRight: '1px solid rgba(224, 224, 224, 1)' };
 
 const TableBasic: React.FC = () => {
   const [data, setData] = useState<Data>(untypedData);
-  
 
   const rowsData = useMemo(() => {
     const rowsData: JSX.Element[] = [];
@@ -78,7 +75,7 @@ const TableBasic: React.FC = () => {
               onClick={() => {
                 if (propsData?.value !== undefined) {
                   const newWindow = window.open(
-                    '/popup',
+                    './#/popup',
                     '',
                     'width=1000,height=400,left=200,top=200',
                   );

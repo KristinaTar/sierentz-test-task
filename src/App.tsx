@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import TableBasic from './Table';
 import {
   Route,
@@ -10,12 +9,14 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        <Route path="/" element={
-          <TableBasic />
-        } />
-        <Route path="/popup" element={
-          <Popup />
-        } />
+        <Route path="/">
+          <Route index element={
+            <TableBasic />
+          } />
+          <Route path="popup" element={
+            <Popup />
+          } />
+        </Route>
       </Routes>
     </div>
   );
