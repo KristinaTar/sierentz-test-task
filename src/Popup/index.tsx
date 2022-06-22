@@ -18,16 +18,13 @@ const brStyle: React.CSSProperties = {
   textAlign: 'center'
 };
 
-const inlineAlign: React.CSSProperties = {
+const table: React.CSSProperties = {
   display: 'inline-block',
   verticalAlign: 'bottom',
+  width: '800px',
 };
 
-type Props = {
-  closeWindow: () => void;
-}
-
-const Popup: React.FC<Props> = ({ closeWindow }) => {
+const Popup: React.FC = () => {
   const [tableData, setTableData] = useState(popupData);
   const [value, setValue] = useState('');
   const date = useMemo(() => {
@@ -51,14 +48,17 @@ const Popup: React.FC<Props> = ({ closeWindow }) => {
     }
 
     setTableData([...tableData, newObject]);
+    window.setTableValue(Number(newObject.value));
 
     setValue('');
     setComment('');
   }
+ 
+
 
   return (
     <>
-      <Container style={inlineAlign}>
+      <Container style={table}>
         <TableContainer component={Paper}>
           <Table aria-label="simple table">
             <TableHead>
@@ -104,12 +104,17 @@ const Popup: React.FC<Props> = ({ closeWindow }) => {
         </TableContainer>
       </Container>
       <Button
+        variant="contained"
         onClick={addHandler}
       >
         Add
       </Button>
+      &nbsp;
       <Button
-        onClick={() => closeWindow()}>
+        variant="contained"
+        onClick={() => {
+          window.closeFunction();
+        }}>
         Close
       </Button>
     </>

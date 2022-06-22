@@ -10,6 +10,14 @@ import untypedData from '../data/dataMainTable';
 import Popup from '../Popup';
 import parseObject from '../data/parseObject';
 import { Container } from '@mui/system';
+import { useMemo, useState } from 'react';
+
+declare global {
+  interface Window {
+    closeFunction: () => void;
+    setTableValue: (value: number) => void;
+  }
+}
 
 const keys = parseObject(untypedData);
 
@@ -33,62 +41,85 @@ type Data = { [Key in RegionKeys]: {
 }
 };
 
-const data: Data = untypedData;
+
+// const data: Data = untypedData;
 const brStyle = { borderRight: '1px solid rgba(224, 224, 224, 1)' };
 
-function openPopup() {
-  const newWindow = window.open('', '', 'width=700,height=600,left=200,top=200');
+const TableBasic: React.FC = () => {
+  const [data, setData] = useState<Data>(untypedData);
+  
 
-  if (newWindow) {
-    ReactDOM.render(
-      [<Popup closeWindow={() => newWindow.close()} /> as React.ReactElement],
-      newWindow.document.body.appendChild(document.createElement("DIV"))
-    )
-  }
-}
-
-const rowsData: JSX.Element[] = [];
-for (let i = 0; i < regionKeys.length; i++) {
-  const regionData = data[regionKeys[i]];
-  const innerRowData: JSX.Element[] = [];
-  innerRowData.push(
-    <TableCell
-      style={brStyle}
-      align="center"
-      key={regionKeys[i]}
-    >
-      {regionKeys[i]}
-    </TableCell>
-  );
-
-  for (let j = 0; j < yearKeys.length; j++) {
-    const yearData = regionData.G[yearKeys[j]];
-
-    for (let k = 0; k < yearPropsKeys.length; k++) {
-      const propsData = yearData && yearData[yearPropsKeys[k]];
-      const value = propsData?.value;
+  const rowsData = useMemo(() => {
+    const rowsData: JSX.Element[] = [];
+    for (let i = 0; i < regionKeys.length; i++) {
+      const regionData = data[regionKeys[i]];
+      const innerRowData: JSX.Element[] = [];
       innerRowData.push(
         <TableCell
           style={brStyle}
           align="center"
-          key={`${regionKeys[i]}-${yearKeys[j]}-${yearPropsKeys[k]}`}
-          onClick={() => {
-            if (propsData?.value) {
-              openPopup();
-            }
-          }}
+          key={regionKeys[i]}
         >
-          {value}
+          {regionKeys[i]}
         </TableCell>
-      )
+      );
+    
+      for (let j = 0; j < yearKeys.length; j++) {
+        const yearData = regionData.G[yearKeys[j]];
+    
+        for (let k = 0; k < yearPropsKeys.length; k++) {
+          const propsData = yearData && yearData[yearPropsKeys[k]];
+          const value = propsData?.value;
+          innerRowData.push(
+            <TableCell
+              style={brStyle}
+              align="center"
+              key={`${regionKeys[i]}-${yearKeys[j]}-${yearPropsKeys[k]}`}
+              onClick={() => {
+                if (propsData?.value !== undefined) {
+                  const newWindow = window.open(
+                    '/popup',
+                    '',
+                    'width=1000,height=400,left=200,top=200',
+                  );
 
+                  if (newWindow) {
+                    newWindow.closeFunction=()=> {
+                      newWindow.close();
+                    }
+                    
+                    newWindow.setTableValue=(value: number) => {
+                      // making deep copy of the data object
+                      const dataCopy = {...data};
+                      dataCopy[regionKeys[i]] = { ...dataCopy[regionKeys[i]] };
+                      dataCopy.G = { ...dataCopy.G };
+                      dataCopy[regionKeys[i]].G[yearKeys[j]] = { 
+                        ...dataCopy[regionKeys[i]].G[yearKeys[j]],
+                      };
+                      
+                      dataCopy[regionKeys[i]].G[yearKeys[j]]![yearPropsKeys[k]] = { 
+                        ...dataCopy[regionKeys[i]].G[yearKeys[j]]![yearPropsKeys[k]],
+                        value: value,
+                      };
+                      
+                      setData(dataCopy);
+                    }
+                  }
+                }
+              }}
+            >
+              {value}
+            </TableCell>
+          )
+    
+        }
+      }
+      rowsData.push(<TableRow key={`${regionKeys[i]}-row`}>{innerRowData}</TableRow>);
     }
-  }
 
-  rowsData.push(<TableRow key={`${regionKeys[i]}-row`}>{innerRowData}</TableRow>)
-}
+    return rowsData;
+  }, [data]);
 
-const TableBasic: React.FC = () => {
   return (
     <Container style={{padding: '100px'}}>
       <TableContainer component={Paper}>

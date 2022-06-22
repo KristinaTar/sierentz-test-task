@@ -1,14 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import TableBasic from './Table';
-
-
+import {
+  Route,
+  Routes,
+} from 'react-router-dom';
+import Popup from './Popup';
 
 function App() {
   return (
     <div className="App">
-     <div>
-      <TableBasic/>
-     </div>
+      <Routes>
+        <Route path="/" element={
+          <TableBasic />
+        } />
+        <Route path="/popup" element={
+          <Popup />
+        } />
+      </Routes>
     </div>
   );
 }
