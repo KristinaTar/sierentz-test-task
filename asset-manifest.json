@@ -1,10 +1,10 @@
 {
   "files": {
-    "main.js": "/sierentz-test-task/static/js/main.61b1bfc3.js",
+    "main.js": "/sierentz-test-task/static/js/main.b5bac346.js",
     "index.html": "/sierentz-test-task/index.html",
-    "main.61b1bfc3.js.map": "/sierentz-test-task/static/js/main.61b1bfc3.js.map"
+    "main.b5bac346.js.map": "/sierentz-test-task/static/js/main.b5bac346.js.map"
   },
   "entrypoints": [
-    "static/js/main.61b1bfc3.js"
+    "static/js/main.b5bac346.js"
   ]
 }
